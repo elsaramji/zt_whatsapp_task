@@ -1,12 +1,8 @@
+import 'package:dartz/dartz.dart';
 
+import '../entities/user.dart';
 
 abstract class AuthRepo {
-  Future<void> signIn(String phoneNumber);
- /* Future<User> getCurrentUser(
-    String userId,
-    String phoneNumber,
-    String name,
-    String avatar,
-  );
-  Future<void> verifyOtp(String verificationId, String otp);*/
+  Future<Either<Exception, User>> loginuser(String phoneNumber);
+  
 }

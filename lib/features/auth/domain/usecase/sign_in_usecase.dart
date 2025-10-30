@@ -1,4 +1,6 @@
+import 'package:dartz/dartz.dart';
 
+import '../entities/user.dart';
 import '../repos/auth_repo.dart';
 
 class SignInUseCase {
@@ -6,7 +8,7 @@ class SignInUseCase {
 
   SignInUseCase(this.authRepo);
 
-  Future<void> call(String phoneNumber) {
-    return authRepo.signIn(phoneNumber);
+  Future<Either<Exception, User>> call(String phoneNumber) {
+    return authRepo.loginuser(phoneNumber);
   }
 }
