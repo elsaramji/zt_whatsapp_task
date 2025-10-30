@@ -23,6 +23,7 @@ class FirebaseDataSourceImpl implements AuthDataSource {
       UserModel userData = UserModel(
         id: userCredential.user!.uid,
         phone: phoneNumber,
+        name: "demo$phoneNumber",
       );
       _usersCollection.doc(userData.phone).set(userData.toJson());
       return right(userData);

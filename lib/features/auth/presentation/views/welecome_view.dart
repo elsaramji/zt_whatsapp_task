@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:zt_whatsapp_task/core/routes/app_routes.dart';
 import 'package:zt_whatsapp_task/core/theme/app_colors.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -95,7 +97,10 @@ class WelcomeScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Navigate to phone number input screen
+                    context.go(AppRoutes.login);
+                  },
                   child: const Text('Agree and continue'),
                 ),
               ),

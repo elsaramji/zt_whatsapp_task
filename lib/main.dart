@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zt_whatsapp_task/core/theme/app_themes.dart';
 
+import 'core/routes/app_routes.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -20,15 +21,15 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) {
-        return MaterialApp(
+        return MaterialApp.router(
           title: 'ZT WhatsApp Task',
+          debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.system,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-          home: child,
+          routerConfig: AppRouter.router,
         );
       },
-      child: const HomeTest(),
     );
   }
 }
@@ -50,8 +51,10 @@ class HomeTest extends StatelessWidget {
               'Screen Width: ${1.sw}',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
-            Text('Screen Height: ${1.sh}',
-                style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              'Screen Height: ${1.sh}',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             TextField(decoration: InputDecoration(hintText: 'Test Input')),
             ElevatedButton(onPressed: () {}, child: const Text('Test Button')),
           ],
