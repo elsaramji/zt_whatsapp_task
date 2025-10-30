@@ -1,15 +1,9 @@
-import 'massage.dart';
+import 'message.dart';
 
 abstract class Chat {
   String id;
-  String senderId;
-  String recipientId;
+  List<String> participants;
   List<Message> messages;
 
-  Chat({
-    required this.id,
-    required this.senderId,
-    required this.recipientId,
-    required this.messages,
-  });
+  Chat({required this.id, required this.participants, required this.messages});
 }
