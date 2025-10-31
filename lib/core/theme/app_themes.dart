@@ -57,7 +57,7 @@ class AppTheme {
     ),
   );
 
-  // --- থিম الوضع المضيء (Light Theme) ---
+  // --- Light Theme ---
   static final ThemeData lightTheme = ThemeData(
     colorScheme: _lightColorScheme,
     scaffoldBackgroundColor: _lightColorScheme.surface,
@@ -119,7 +119,7 @@ class AppTheme {
     ),
   );
 
-  // --- থিম الوضع المظلم (Dark Theme) ---
+  // --- Dark Theme ---
   static final ThemeData darkTheme = ThemeData(
     colorScheme: _darkColorScheme,
     scaffoldBackgroundColor: _darkColorScheme.surface,

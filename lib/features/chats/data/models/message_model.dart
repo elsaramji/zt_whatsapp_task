@@ -17,7 +17,7 @@ class MessageModel extends Message {
   Map<String, dynamic> toJson() => {
     'chatId': chatId,
     'senderId': senderId,
-    'timeSendIn': timeSendIn.toIso8601String(),
+    'timeSendIn': timeSendIn,
     'content': content,
   };
 }

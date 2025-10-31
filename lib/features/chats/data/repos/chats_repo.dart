@@ -26,7 +26,7 @@ class ChatsRepoFireStoreImpl implements ChatsRepo {
     await dataSource.sendMessage(chatId, message);
   }
   @override
-  Future<Either<Exception, ChatModel>> getChat(String chatId) async {
-    return await dataSource.getChat(chatId);
+  Future<Either<Exception, List<ChatModel>>> getChats() async {
+    return await dataSource.getChats();
   }
 }

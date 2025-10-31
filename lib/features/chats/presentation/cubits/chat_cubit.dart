@@ -29,14 +29,13 @@ class ChatsCubit extends Cubit<ChatsState> {
     emit(ChatsSuccess());
   }
 
-  Future<Either<Exception, Chat>> getChat(String chatId) async {
+  Future<void> getChat() async {
     emit(ChatsLoading());
 
-    final result = await getChatUseCase.call(chatId);
+    final result = await getChatUseCase.call();
     result.fold(
       (failure) => emit(ChatsError(failure.toString())),
       (chat) => emit(ChatsLoaded(chat)),
     );
-    return result;
   }
 }

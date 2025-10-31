@@ -8,7 +8,7 @@ import 'package:zt_whatsapp_task/core/theme/app_colors.dart';
 import '../cubits/auth_cubit.dart';
 import '../cubits/auth_state.dart';
 
-// 1. نموذج بيانات بسيط لتمثيل الدولة
+// 1. Simple data model to represent country
 class Country {
   final String name;
   final String code;
@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     _phoneController.addListener(() {
       setState(() {
-        // يمكنك إضافة تحقق أفضل هنا (مثل 10 أرقام)
+        // You can add better validation here (e.g., 10 digits)
         isButtonEnabled = _phoneController.text.isNotEmpty;
       });
     });
@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // --- دالة لإظهار الـ SnackBar ---
+  // --- Function to display SnackBar ---
   void _showSnackBar(String message, {bool isError = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -68,15 +68,15 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // --- دالة استدعاء الـ Cubit ---
+  // --- Function to call Cubit ---
   void _login() {
-    // التأكد من أن الزر مفعل والحالة ليست تحميل
+    // Ensure button is enabled and state is not loading
     if (!isButtonEnabled) return;
 
     final phoneNumber =
         '${_countryCodeController.text}${_phoneController.text}';
 
-    // استدعاء دالة الـ Cubit
+    // Call Cubit function
     context.read<AuthCubit>().loginUser(phoneNumber);
   }
 

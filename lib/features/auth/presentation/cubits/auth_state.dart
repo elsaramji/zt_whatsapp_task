@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:zt_whatsapp_task/features/auth/domain/entities/user.dart';
 
-// الفئة الأساسية (Abstract) للحالات
+// The base (Abstract) class for states
 abstract class AuthState extends Equatable {
   const AuthState();
 
@@ -9,13 +9,13 @@ abstract class AuthState extends Equatable {
   List<Object> get props => [];
 }
 
-// الحالة الأولية (عند بدء التشغيل)
+// Initial state (at startup)
 class AuthInitial extends AuthState {}
 
-// حالة التحميل (عند الضغط على "Next")
+// Loading state (when "Next" is pressed)
 class AuthLoading extends AuthState {}
 
-// حالة النجاح (عند تسجيل الدخول بنجاح)
+// Success state (when login is successful)
 class AuthSuccess extends AuthState {
   final User user;
   const AuthSuccess(this.user);
@@ -24,7 +24,7 @@ class AuthSuccess extends AuthState {
   List<Object> get props => [user];
 }
 
-// حالة الفشل (عند حدوث خطأ)
+// Failure state (when an error occurs)
 class AuthFailure extends AuthState {
   final String errorMessage;
   const AuthFailure(this.errorMessage);

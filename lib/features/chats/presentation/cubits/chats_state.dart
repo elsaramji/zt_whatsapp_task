@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:zt_whatsapp_task/features/chats/data/models/chat_model.dart';
 import 'package:zt_whatsapp_task/features/chats/domain/entities/chat.dart';
 import 'package:zt_whatsapp_task/features/chats/domain/entities/message.dart';
 
@@ -21,18 +22,18 @@ class ChatsError extends ChatsState {
   List<Object> get props => [message];
 }
 
-// عند العثور على محادثة سابقة أو إنشاء واحدة جديدة
+// When finding a previous conversation or creating a new one
 class ChatsLoaded extends ChatsState {
-  final Chat chats;
+  final List<ChatModel> chats;
   const ChatsLoaded(this.chats);
   @override
   List<Object> get props => [chats];
 }
 
-// في حال لم يتم العثور على محادثة (شاشة فارغة)
+// When no conversation is found (empty screen)
 class ChatEmpty extends ChatsState {}
 
-// في حال حدوث خطأ
+// In case of an error
 class ChatsFailure extends ChatsState {
   final String message;
   const ChatsFailure(this.message);

@@ -2,7 +2,7 @@ abstract class Message {
   String chatId;
   String senderId;
   String? content;
-  DateTime timeSendIn;
+  String timeSendIn;
 
   Message({
     required this.chatId,

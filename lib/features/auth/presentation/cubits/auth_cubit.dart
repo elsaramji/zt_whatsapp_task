@@ -13,25 +13,25 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit() : super(AuthInitial());
 
-  // هذه هي الدالة التي ستستدعيها الواجهة
+  // This is the function that will be called by the interface
   Future<void> loginUser(String phoneNumber) async {
-    // 1. إصدار حالة التحميل لإظهار Spinner
+    // 1. Issue loading state to show Spinner
     emit(AuthLoading());
 
-    // 2. تنفيذ الـ UseCase
-    // سيقوم الـ UseCase باستدعاء الـ Repo -> DataSource -> Firebase
+    // 2. Execute the UseCase
+    // The UseCase will call the Repo -> DataSource -> Firebase
     final result = await _signInUseCase.call(phoneNumber);
 
-    // 3. معالجة النتيجة (Either)
+    // 3. Handle the result (Either)
     result.fold(
-      // 3a. في حالة الفشل (Left)
+      // 3a. In case of failure (Left)
       (exception) {
-        // إصدار حالة الفشل مع رسالة الخطأ
+        // Issue failure state with error message
         emit(AuthFailure(exception.toString()));
       },
-      // 3b. في حالة النجاح (Right)
+      // 3b. In case of success (Right)
       (user) {
-        // إصدار حالة النجاح مع بيانات المستخدم
+        // Issue success state with user data
         _signInUseCase.saveUserId(user as UserModel);
         emit(AuthSuccess(user));
       },

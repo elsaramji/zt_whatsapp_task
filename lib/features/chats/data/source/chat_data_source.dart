@@ -6,7 +6,7 @@ import 'package:zt_whatsapp_task/features/chats/data/models/message_model.dart';
 abstract class ChatDataSource {
   Future<void> sendMessage(String chatId, MessageModel message);
   Future<void> createChat(List<String> participants, List<MessageModel> messages);
-  Future<Either<Exception, ChatModel>> getChat(String chatId);
+  Future<Either<Exception, List<ChatModel>>> getChats();
 }
 
 class ChatDataSourceImpl implements ChatDataSource {
@@ -43,15 +43,16 @@ class ChatDataSourceImpl implements ChatDataSource {
   }
 
   @override
-  Future<Either<Exception, ChatModel>> getChat(String chatId) async {
-    final chatDoc = _collectionReference.doc(chatId);
-    final chatSnapshot = await chatDoc.get();
-    if (chatSnapshot.exists) {
-      return right(
-        ChatModel.fromJson(chatSnapshot.data()! as Map<String, dynamic>),
-      );
-    } else {
-      return left(Exception('Chat with id $chatId does not exist'));
+  Future<Either<Exception, List<ChatModel>>> getChats() async {
+    try {
+      final querySnapshot = await _collectionReference.get();
+      final chats = querySnapshot.docs
+          .map((doc) => ChatModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return right(chats);
+    } catch (e) {
+      return left(Exception('Failed to fetch chats: $e'));
     }
+
   }
 }

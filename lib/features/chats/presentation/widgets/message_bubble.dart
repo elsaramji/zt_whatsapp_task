@@ -20,7 +20,7 @@ class MessageBubble extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final isLightMode = Theme.of(context).brightness == Brightness.light;
 
-    // 1. تحديد لون الفقاعة بناءً على الوضع (مظلم/مضيء) والمرسل
+    // 1. Determine bubble color based on mode (dark/light) and sender
     final bubbleColor = isMe
         ? (isLightMode ? AppColors.lightGreen : AppColors.darkGreen)
         : colors.surface;
@@ -28,23 +28,18 @@ class MessageBubble extends StatelessWidget {
     // 2. تحديد لون النص
     final textColor = isMe ? Colors.black : colors.onSurface;
 
+    // 3. Align bubble right or left
     return Align(
-      // 3. محاذاة الفقاعة يميناً أو يساراً
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         margin: EdgeInsets.symmetric(vertical: 4.h),
-        constraints: BoxConstraints(maxWidth: 0.75.sw), // أقصى عرض للفقاعة
+        constraints: BoxConstraints(maxWidth: 0.75.sw), // Maximum width for bubble
         decoration: BoxDecoration(
           color: bubbleColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.r),
-            topRight: Radius.circular(12.r),
-            bottomLeft: isMe ? Radius.circular(12.r) : Radius.circular(0.r),
-            bottomRight: isMe ? Radius.circular(0.r) : Radius.circular(12.r),
-          ),
+          borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
-            if (!isMe) // إضافة ظل خفيف للرسائل المستلمة
+            if (!isMe) // Add light shadow for received messages
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),
                 blurRadius: 2,
@@ -53,16 +48,16 @@ class MessageBubble extends StatelessWidget {
           ],
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min, // Make column wrap content
           crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min, // لجعل العمود يحتضن المحتوى
           children: [
-            // 4. نص الرسالة
+            // 4. Message text
             Text(
               message,
               style: TextStyle(color: textColor, fontSize: 16.sp),
             ),
             SizedBox(height: 4.h),
-            // 5. الوقت وعلامات القراءة
+            // 5. Time and read marks
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -77,7 +72,7 @@ class MessageBubble extends StatelessWidget {
                   SizedBox(width: 4.w),
                   Icon(
                     Icons.done_all,
-                    color: AppColors.blueLink, // لون علامات القراءة
+                    color: AppColors.blueLink, // Color for read marks
                     size: 16.sp,
                   ),
                 ],

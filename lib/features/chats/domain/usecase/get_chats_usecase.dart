@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:zt_whatsapp_task/features/chats/data/models/chat_model.dart';
 import 'package:zt_whatsapp_task/features/chats/domain/repos/chats_repo.dart';
 
 import '../entities/chat.dart';
@@ -8,7 +9,7 @@ class GetChatUseCase {
 
   GetChatUseCase(this.chatsRepo);
 
-  Future<Either<Exception, Chat>> call(String chatId) {
-    return chatsRepo.getChat(chatId);
+  Future<Either<Exception, List<ChatModel>>> call() {
+    return chatsRepo.getChats();
   }
 }

@@ -148,7 +148,7 @@ class ContactListTile extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyLarge,
       ),
       subtitle: Text(
-        user.phone, // يمكنك استبدال هذا بحالة (Status) المستخدم لاحقاً
+        user.phone, // You can replace this with the user's status later
         style: Theme.of(context).textTheme.bodyMedium,
       ),
     );

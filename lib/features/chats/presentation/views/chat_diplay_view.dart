@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:zt_whatsapp_task/features/auth/data/models/user_model.dart';
+import 'package:zt_whatsapp_task/features/chats/data/models/chat_model.dart';
 import 'package:zt_whatsapp_task/features/chats/data/models/message_model.dart';
 import 'package:zt_whatsapp_task/features/chats/presentation/cubits/chat_cubit.dart';
 
@@ -29,40 +29,31 @@ class AppColors {
 
 // --- End of dummy data ---
 
-class ChatDetailView extends StatelessWidget {
+class ChatDispalyView extends StatelessWidget {
   // We no longer need chatId here, but we'll keep it
-  final String chatId;
-  final UserModel user;
-  final String receiverId;
-  const ChatDetailView({
-    super.key,
-    required this.chatId,
-    required this.receiverId,
-    required this.user,
-  });
+  final ChatModel chat;
 
+  const ChatDispalyView({super.key, required this.chat});
   @override
   Widget build(BuildContext context) {
     // This interface no longer depends on Cubit
-    return _ChatDetailViewBody(receiverId: receiverId, user: user);
+    return _ChatDisPlayViewBody(chat: chat);
   }
 }
 
-class _ChatDetailViewBody extends StatefulWidget {
-  final String receiverId;
-  final UserModel user;
+class _ChatDisPlayViewBody extends StatefulWidget {
+  final ChatModel chat;
 
-  const _ChatDetailViewBody({required this.receiverId, required this.user});
+  const _ChatDisPlayViewBody({required this.chat});
 
   @override
-  State<_ChatDetailViewBody> createState() => _ChatDetailViewBodyState();
+  State<_ChatDisPlayViewBody> createState() => _ChatDisPlayViewBodyState();
 }
 
-class _ChatDetailViewBodyState extends State<_ChatDetailViewBody> {
+class _ChatDisPlayViewBodyState extends State<_ChatDisPlayViewBody> {
   final TextEditingController _messageController = TextEditingController();
 
-  // Local dummy message list
-  final List<FakeMessage> _messages = [];
+  // Dummy message list for testing
 
   @override
   void dispose() {
@@ -75,7 +66,7 @@ class _ChatDetailViewBodyState extends State<_ChatDetailViewBody> {
     if (_messageController.text.trim().isEmpty) return;
 
     final newMessage = FakeMessage(
-      chatId: "$CURRENT_USER_ID${widget.receiverId}",
+      chatId: "$CURRENT_USER_ID${widget.chat.participants[1]}",
       senderId: CURRENT_USER_ID,
       timeSendIn:
           '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
@@ -84,7 +75,7 @@ class _ChatDetailViewBodyState extends State<_ChatDetailViewBody> {
     );
 
     setState(() {
-      _messages.add(newMessage);
+      widget.chat.messages.add(newMessage);
     });
     _messageController.clear();
   }
@@ -106,8 +97,7 @@ class _ChatDetailViewBodyState extends State<_ChatDetailViewBody> {
                 children: [
                   CircleAvatar(
                     backgroundImage: NetworkImage(
-                      widget.user.avatar ??
-                          'https://www.gravatar.com/avatar/placeholder',
+                      'https://www.gravatar.com/avatar/placeholder',
                     ),
                     radius: 16.r,
                   ),
@@ -116,13 +106,14 @@ class _ChatDetailViewBodyState extends State<_ChatDetailViewBody> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        overflow: TextOverflow.fade,
-                        widget.user.name ?? 'Unknown', // Matches the image
+                        overflow: TextOverflow.visible,
+                        "JoneDue", // Matches the image
 
                         style: textTheme.bodyMedium,
                       ),
                       Text(
-                        widget.user.phone, // Matches the image
+                        overflow: TextOverflow.visible,
+                        "Online", // Matches the image
                         style: textTheme.labelMedium,
                       ),
                     ],
@@ -135,7 +126,7 @@ class _ChatDetailViewBodyState extends State<_ChatDetailViewBody> {
                 IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
               ],
             ),
-            // You can add a background image here
+            // You can add background image here
             // body: Container(
             //   decoration: const BoxDecoration(
             //     image: DecorationImage(
@@ -154,22 +145,25 @@ class _ChatDetailViewBodyState extends State<_ChatDetailViewBody> {
                       horizontal: 10.w,
                       vertical: 10.h,
                     ),
-                    itemCount: _messages.length,
+                    itemCount: widget.chat.messages.length,
                     itemBuilder: (context, index) {
-                      final message = _messages[index];
+                      final message = widget.chat.messages[index];
                       final bool isMe = message.senderId == CURRENT_USER_ID;
 
-                      // في الصورة، حتى رسائلك تظهر على اليسار
-                      // لكن السلوك الطبيعي لواتساب هو أن رسائلك على اليمين
-                      // سنلتزم بالسلوك الطبيعي (isMe = true -> الجانب الأيمن)
+                      // In the screenshot, even your messages appear on the left
+                      // But WhatsApp's natural behavior is that your messages are on the right
+                      // We'll stick with the natural behavior (isMe = true -> right side)
 
-                      // إذا كنت تريد اتباع الصورة 100% (جميع الرسائل على اليسار):
+                      // If you want to stick to the image 100% (all messages on the left):
                       // final bool isMeForUI = false;
 
-                      // السلوك الطبيعي:
+                      // Natural behavior:
                       final bool isMeForUI = isMe;
 
-                      return _ChatBubble(message: message, isMe: isMeForUI);
+                      return _ChatBubble(
+                        message: message.content ?? "",
+                        isMe: isMeForUI,
+                      );
                     },
                   ),
                 ),
@@ -179,8 +173,9 @@ class _ChatDetailViewBodyState extends State<_ChatDetailViewBody> {
                     _sendMessage();
                     context.read<ChatsCubit>().createChat(
                       CURRENT_USER_ID,
-                      widget.receiverId, // معرف المستلم الوهمي
-                      _messages,
+                      widget.chat.participants[1],
+                      widget.chat.messages as List<MessageModel>,
+                      // ID المستلم الوهمي
                     );
                   },
                 ),
@@ -193,9 +188,9 @@ class _ChatDetailViewBodyState extends State<_ChatDetailViewBody> {
   }
 }
 
-// --- فقاعة الرسالة ---
+// --- ويدجت فقاعة الرسالة ---
 class _ChatBubble extends StatelessWidget {
-  final FakeMessage message;
+  final String message;
   final bool isMe;
 
   const _ChatBubble({required this.message, required this.isMe});
@@ -205,7 +200,7 @@ class _ChatBubble extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    // These colors match the image (light green and white/dark gray)
+    // هذه الألوان مطابقة للصورة (أخضر فاتح وأبيض/رمادي داكن)
     final bubbleColor = isMe
         ? const Color(0xFFE7FFDB)
         : (Theme.of(context).brightness == Brightness.light
@@ -219,9 +214,9 @@ class _ChatBubble extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         margin: EdgeInsets.symmetric(vertical: 4.h),
         constraints: BoxConstraints(maxWidth: 0.75.sw), // Set maximum width
-      decoration: BoxDecoration(
-        color: bubbleColor,
-        borderRadius: BorderRadius.circular(12.r),
+        decoration: BoxDecoration(
+          color: bubbleColor,
+          borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -231,10 +226,11 @@ class _ChatBubble extends StatelessWidget {
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end, // Time always at bottom right
+          crossAxisAlignment:
+              CrossAxisAlignment.end, // Time always at the bottom right
           children: [
             Text(
-              message.content ?? "",
+              message,
               style: textTheme.bodyMedium?.copyWith(color: textColor),
             ),
             SizedBox(height: 4.h),
@@ -264,7 +260,7 @@ class _ChatBubble extends StatelessWidget {
   }
 }
 
-// --- Input bar widget ---
+// --- ويدجت شريط الإدخال ---
 class _MessageInputBar extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onSend;
@@ -326,7 +322,7 @@ class _MessageInputBar extends StatelessWidget {
                       size: 24.sp,
                     ),
                   ),
-                  // Hide camera if there's text
+                  // Hide camera if there is text
                   if (controller.text.isEmpty)
                     IconButton(
                       onPressed: () {},

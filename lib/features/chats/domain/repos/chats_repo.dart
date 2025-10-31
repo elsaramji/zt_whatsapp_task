@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:zt_whatsapp_task/features/chats/data/models/message_model.dart';
 
 import '../../../auth/domain/entities/user.dart';
+import '../../data/models/chat_model.dart';
 import '../entities/chat.dart';
 
 abstract class ChatsRepo {
@@ -10,5 +11,6 @@ abstract class ChatsRepo {
     List<String> participants,
    List<MessageModel> messages,
   );
-  Future<Either<Exception, Chat>> getChat(String chatId);
+  Future<Either<Exception, List<ChatModel>>> getChats();
 }
+  

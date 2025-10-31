@@ -11,7 +11,7 @@ class SendMessageUseCase {
     final message = MessageModel(
       chatId: chatId,
       senderId: senderId,
-      timeSendIn: DateTime.now(),
+      timeSendIn: '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
       content: messageContent,
     );
     await chatsRepo.sendMessage(chatId, message);

@@ -47,14 +47,14 @@ class _ChatInputBarState extends State<ChatInputBar> {
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
-      color: colors.surface, // لون الخلفية لشريط الإدخال
+      color: colors.surface, // Background color for input bar
       child: Row(
         children: [
-          // 1. حقل إدخال النص
+          // 1. Text input field
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: colors.background, // لون الخلفية لحقل النص
+                color: colors.background, // Background color for text field
                 borderRadius: BorderRadius.circular(24.r),
               ),
               child: Row(
@@ -69,7 +69,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                   Expanded(
                     child: TextField(
                       controller: _controller,
-                      maxLines: null, // للسماح بتعدد الأسطر
+                      maxLines: null, // Allow multiple lines
                       decoration: InputDecoration(
                         hintText: 'Message',
                         border: InputBorder.none,
@@ -85,7 +85,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                     icon: Icon(Icons.attach_file,
                         color: colors.onSurfaceVariant),
                   ),
-                  // 2. إظهار الكاميرا فقط إذا كان الحقل فارغاً
+                  // 2. Show camera only if field is empty
                   if (!_showSendButton)
                     IconButton(
                       onPressed: () {

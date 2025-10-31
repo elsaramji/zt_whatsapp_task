@@ -17,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  // 1. قائمة الشاشات التي سيتم التبديل بينها
+  // 1. List of screens to switch between
   final List<Widget> _pages = [const ChatsListView(), const UpdatesView()];
 
   void _onItemTapped(int index) {
@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
+    // قائمة الشاشات التي سيتم التبديل بينها
     return BlocProvider(
       create: (context) => ContactsCubit(),
       child: Scaffold(
