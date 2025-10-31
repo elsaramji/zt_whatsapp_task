@@ -11,6 +11,10 @@ This project is a high-fidelity WhatsApp clone built with Flutter as part of a t
 * **Light & Dark Mode Support:** A complete design that seamlessly supports both themes.
 * **Responsive UI:** Utilizes flutter\_screenutil to ensure all UI components are responsive across different screen sizes.
 
+## **🎥 Preview**
+
+Check out the app demo video: [Watch Demo](https://drive.google.com/file/d/1VpQDtP6FIoqhjP8veKyI9m_Oq5ZV8c5n/view?usp=sharing)
+
 ## **📱 Application Screenshots**
 
 The application is designed to be fully functional and aesthetically consistent in both Light and Dark modes.
