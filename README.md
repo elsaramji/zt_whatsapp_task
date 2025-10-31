@@ -24,7 +24,6 @@ The application is designed to be fully functional and aesthetically consistent 
 | :---- | :---- |
 | <img src="screenshots/Screenshot_1761888998.png" height="375" alt="Chat Screen - Light Mode"/> | <img src="screenshots/Screenshot_1761888986.png" height="375" alt="Chat Screen - Dark Mode"/> |
 
-
 ### Screenshots Setup
 
 Create a `screenshots` folder in your project root and place the screenshot images inside it.
@@ -106,6 +105,7 @@ The code is divided into three main layers for each feature (e.g., auth, chats):
 
 The code is organized by feature (feature-first) to promote the Clean Architecture structure:
 
+``` bash
 lib/
 ├── core/                   \# Shared code (Themes, Routes, Colors)
 │   ├── routes/
@@ -134,3 +134,5 @@ lib/
 │
 ├── firebase\_options.dart   \# Firebase configuration
 └── main.dart               \# Application entry point
+
+```
