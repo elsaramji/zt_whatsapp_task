@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:zt_whatsapp_task/features/auth/data/models/user_model.dart';
@@ -17,11 +19,12 @@ class GetContactSourceImpl implements GetContactSource {
       QuerySnapshot querySnapshot = await usersCollection.get();
       List<UserModel> users = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        log(doc.data().toString());
         return UserModel.fromJson(data);
       }).toList();
-      return Right(users);
+      return right(users);
     } catch (e) {
-      return Left(Exception('Failed to fetch contacts: $e'));
+      return left(Exception('Failed to fetch contacts: $e'));
     }
   }
 }

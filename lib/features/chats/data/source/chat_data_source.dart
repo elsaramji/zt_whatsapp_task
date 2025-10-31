@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
 import 'package:zt_whatsapp_task/features/chats/data/models/chat_model.dart';
 import 'package:zt_whatsapp_task/features/chats/data/models/message_model.dart';
 
 abstract class ChatDataSource {
   Future<void> sendMessage(String chatId, MessageModel message);
-  Future<void> createChat(List<String> participants, MessageModel message);
-  Future<ChatModel> getChat(String chatId);
+  Future<void> createChat(List<String> participants, List<MessageModel> messages);
+  Future<Either<Exception, ChatModel>> getChat(String chatId);
 }
 
 class ChatDataSourceImpl implements ChatDataSource {
@@ -29,7 +30,7 @@ class ChatDataSourceImpl implements ChatDataSource {
   @override
   Future<void> createChat(
     List<String> participants,
-    MessageModel message,
+    List<MessageModel> messages,
   ) async {
     final chatDoc = _collectionReference.doc(
       "${participants[0]}_${participants[1]}",
@@ -37,18 +38,20 @@ class ChatDataSourceImpl implements ChatDataSource {
     await chatDoc.set({
       'id': chatDoc.id,
       'participants': participants,
-      'messages': [message.toJson()],
+      'messages': messages.map((msg) => msg.toJson()).toList(),
     });
   }
 
   @override
-  Future<ChatModel> getChat(String chatId) async {
+  Future<Either<Exception, ChatModel>> getChat(String chatId) async {
     final chatDoc = _collectionReference.doc(chatId);
     final chatSnapshot = await chatDoc.get();
     if (chatSnapshot.exists) {
-      return ChatModel.fromJson(chatSnapshot.data()! as Map<String, dynamic>);
+      return right(
+        ChatModel.fromJson(chatSnapshot.data()! as Map<String, dynamic>),
+      );
     } else {
-      throw Exception('Chat with id $chatId does not exist');
+      return left(Exception('Chat with id $chatId does not exist'));
     }
   }
 }

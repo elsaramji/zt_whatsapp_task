@@ -3,11 +3,12 @@ import 'package:zt_whatsapp_task/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:zt_whatsapp_task/features/auth/data/source/firebase_data_source.dart';
 import 'package:zt_whatsapp_task/features/auth/domain/usecase/sign_in_usecase.dart';
 
+import '../../data/models/user_model.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final SignInUseCase _signInUseCase = SignInUseCase(
-    AuthRepoImpl(FirebaseDataSourceImpl()),
+    AuthRepoImpl(AuthDataSourceImpl()),
   );
 
   AuthCubit() : super(AuthInitial());
@@ -31,6 +32,7 @@ class AuthCubit extends Cubit<AuthState> {
       // 3b. في حالة النجاح (Right)
       (user) {
         // إصدار حالة النجاح مع بيانات المستخدم
+        _signInUseCase.saveUserId(user as UserModel);
         emit(AuthSuccess(user));
       },
     );

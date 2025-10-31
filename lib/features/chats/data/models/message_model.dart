@@ -5,8 +5,7 @@ class MessageModel extends Message {
     required super.chatId,
     required super.senderId,
     required super.timeSendIn,
-    super.content,
-    super.fileUrl,
+    super.content, 
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) => MessageModel(
@@ -14,13 +13,11 @@ class MessageModel extends Message {
     senderId: json['senderId'],
     timeSendIn: json['timeSendIn'],
     content: json['content'],
-    fileUrl: json['fileUrl'],
   );
   Map<String, dynamic> toJson() => {
     'chatId': chatId,
     'senderId': senderId,
     'timeSendIn': timeSendIn.toIso8601String(),
     'content': content,
-    'fileUrl': fileUrl,
   };
 }

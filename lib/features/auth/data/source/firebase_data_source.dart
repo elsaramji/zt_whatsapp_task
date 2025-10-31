@@ -1,13 +1,19 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zt_whatsapp_task/features/auth/data/models/user_model.dart';
 
 abstract class AuthDataSource {
   Future<Either<Exception, UserModel>> loginUser(String phoneNumber);
+  Future<Either<Exception, UserModel>> getUser(String userId);
+  Future<void> saveUserLocally(UserModel user);
+  Future<String?> getUserLocally();
 }
 
-class FirebaseDataSourceImpl implements AuthDataSource {
+class AuthDataSourceImpl implements AuthDataSource {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final CollectionReference _usersCollection = FirebaseFirestore.instance
       .collection('users');
@@ -24,6 +30,7 @@ class FirebaseDataSourceImpl implements AuthDataSource {
         id: userCredential.user!.uid,
         phone: phoneNumber,
         name: "demo$phoneNumber",
+        avatar: "https://placehold.co/100x100/grey/white?text=User",
       );
       _usersCollection.doc(userData.phone).set(userData.toJson());
       return right(userData);
@@ -43,5 +50,35 @@ class FirebaseDataSourceImpl implements AuthDataSource {
     } catch (e) {
       return left(Exception("un expected error"));
     }
+  }
+
+  @override
+  Future<Either<Exception, UserModel>> getUser(String userId) async {
+    try {
+      DocumentSnapshot snapshot = await _usersCollection.doc(userId).get();
+      return right(UserModel.fromJson(snapshot.data() as Map<String, dynamic>));
+    } catch (e) {
+      return left(Exception("un expected error"));
+    }
+  }
+
+  // save user locally as shared preferences
+  @override
+  Future<void> saveUserLocally(UserModel user) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userid', user.id);
+    log("User saved locally: ${user.id}");
+  }
+
+  // get user locally from shared preferences
+  @override
+  Future<String?> getUserLocally() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('userid');
+    if (userId != null) {
+      log("User retrieved locally: $userId");
+      return userId;
+    }
+    return null;
   }
 }
