@@ -5,7 +5,6 @@ import 'package:zt_whatsapp_task/features/auth/presentation/views/welecome_view.
 import 'package:zt_whatsapp_task/features/chats/presentation/views/chat_diplay_view.dart';
 import 'package:zt_whatsapp_task/features/home/persentation/views/get_contacts_view.dart';
 import 'package:zt_whatsapp_task/features/status/data/models/dummy_status_model.dart';
-
 import '../../features/chats/data/models/chat_model.dart';
 import '../../features/chats/presentation/views/chat_view_creator.dart';
 import '../../features/home/persentation/views/home_view.dart';
@@ -15,7 +14,7 @@ class AppRouter {
   // 2. Router setup
   static final GoRouter router = GoRouter(
     // 3. Define initial path
-    initialLocation: AppRoutes.home,
+    initialLocation: AppRoutes.welcome,
 
     // 4. Define all routes
     routes: [
